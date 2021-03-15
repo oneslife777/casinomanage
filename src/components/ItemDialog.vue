@@ -339,7 +339,7 @@ export default {
         this.jpyEur = res.data.rates.JPY
         this.jpyUsd = res.data.rates.JPY/res.data.rates.USD
         this.jpyUsd = this.jpyUsd.toFixed(2)
-        this.amount = Number((this.amount2 /this.jpyUsd).toFixed(2))
+        this.amount = Number((this.amount2 /this.jpyUsd).toFixed(0))
         }.bind(this))
         
     },
