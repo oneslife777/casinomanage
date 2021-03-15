@@ -175,10 +175,10 @@ data () {
         
         //インカムのデータが空欄ではない時
         if(this.DATA[i].income !== null){
-          NAME = "　　　　　＄" + String(this.DATA[i].income) +"　　" 
+          NAME = "＄" + String(this.DATA[i].income) +"　　" 
           COLORS = 'green'
         }else{
-          NAME = "　　　　　＄" + String(-this.DATA[i].outgo) + "　　" 
+          NAME = "＄" + String(-this.DATA[i].outgo) + "　　" 
           COLORS = 'green'
         }
   
@@ -239,7 +239,7 @@ data () {
                 COLORS = "red"  
                 }
 
-     NAME = "　　　　　＄" + TOTAL
+     NAME = "＄" + TOTAL
      
      COLORS = "white"
      events[y-1].name = NAME
