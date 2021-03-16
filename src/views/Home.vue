@@ -307,7 +307,7 @@ mounted(){
     
     this.fetchAbData({yearMonth})
     this.DATA = this.abData[yearMonth]
-    
+    this.DATA.date = this.DATA.date.replace(/-/g,"/")
     },
 
     /**
