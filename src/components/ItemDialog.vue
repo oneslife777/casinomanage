@@ -126,6 +126,7 @@
           <v-text-field
             v-model.number="amount"
             prefix="＄"
+            label="少数第2位以下は切り捨てされます"
             patte rn="[0-9]*"
             :rules="amountRules"
              @change="onChangeAmount"
@@ -231,7 +232,7 @@ export default {
       ],
       amountRules: [
         v => v >= 0 || '金額は0以上で入力してください',
-        v => Number.isInteger(Number(v)) || '整数で入力してください'
+        //v => Number.isInteger(Number(v)) || '整数で入力してください'
       ],
       memoRule: v => v.length <= 50 || 'メモは50文字以内で入力してください'
     }
@@ -331,6 +332,14 @@ export default {
      
     },
 
+    /** 金額が入力されたとき */
+    onChangeAmount () {
+      
+    //this.amount = Number(this.amount).toFixed(2)
+    this.amount = Math.floor(this.amount * 100) / 100;
+        
+    },
+
     /** 通貨が切り替わったとき */
     onChangeTuuka () {
       
@@ -339,7 +348,7 @@ export default {
         this.jpyEur = res.data.rates.JPY
         this.jpyUsd = res.data.rates.JPY/res.data.rates.USD
         this.jpyUsd = this.jpyUsd.toFixed(2)
-        this.amount = Number((this.amount2 /this.jpyUsd).toFixed(0))
+        this.amount = Number((this.amount2 /this.jpyUsd).toFixed(2))
         }.bind(this))
         
     },
