@@ -35,10 +35,23 @@
       </v-btn>
     </v-app-bar>
     
-
+<v-col>
+  <v-spacer/>
+</v-col>
+<v-col>
+  <v-spacer/>
+</v-col>
+<v-col>
+  <v-spacer/>
+</v-col>
+<v-col>
+  <v-spacer/>
+</v-col>
+<v-col>
+  <v-spacer/>
+</v-col>
     
     <!-- メインコンテンツ -->
-    <br><br><br><br><br>
     <v-main>
       <v-container fluid>
         <!-- router-view の中身がパスによって切り替わる -->
