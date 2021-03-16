@@ -37,7 +37,7 @@
 
     
     <!-- メインコンテンツ -->
-    <br><br><br><br><br>
+    <br><br><br><br><br><br><br>
     <v-main>
       <v-container fluid>
         <!-- router-view の中身がパスによって切り替わる -->
