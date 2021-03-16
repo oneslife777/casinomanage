@@ -5,6 +5,7 @@
     <v-app-bar absolute
       color="#fcb69f"
       dark
+      max-height="128px"
       shrink-on-scroll
       src="https://picsum.photos/1920/1080?random"
       scroll-target="#scrolling-techniques-2">
@@ -37,7 +38,7 @@
 
     
     <!-- メインコンテンツ -->
-    <br><br><br><br><br><br><br>
+    <br><br><br><br><br>
     <v-main>
       <v-container fluid>
         <!-- router-view の中身がパスによって切り替わる -->
