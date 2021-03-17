@@ -120,11 +120,11 @@
      <!-- <div class="page">
    <Componentna :message="HAI"></Componentna>
   </div>-->
-
+<!--
 カテゴリ1{{sum.categories}}
 <br>
 カテゴリ2{{sum.categories2}}
-  
+ --> 
 
 
 <Componentna :message="DATA"></Componentna>
