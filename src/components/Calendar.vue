@@ -220,7 +220,8 @@ data () {
 
       //INCOMEの数値を合算
       let ALLINCOME = INCOME.reduce(function(sum, element){
-      return Math.round((sum * 100) / 100) + Math.round((element * 100) / 100)
+      //return Math.round((sum * 100) / 100) + Math.round((element * 100) / 100)
+      return sum + element 
       }, 0);
       //Math.round(ALLINCOME * 100) / 100;
 
@@ -229,13 +230,14 @@ data () {
 
       //OUTGOの数値を合算
       let ALLOUTGO = OUTGO.reduce(function(sum, element){
-      return Math.round((sum * 100) / 100) + Math.round((element * 100) / 100)
+      //return Math.round((sum * 100) / 100) + Math.round((element * 100) / 100)
+      return sum + element
       }, 0);
       //Math.round(ALLOUTGO * 100) / 100;
       
       var TOTAL = ALLINCOME - ALLOUTGO
       Math.round(TOTAL * 100) / 100;
-    
+      TOTAL = (TOTAL).toFixed(2)    
 
       //合計金額の判定
              //   if(TOTAL > 0){
