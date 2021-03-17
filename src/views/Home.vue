@@ -46,7 +46,7 @@
         </v-col>
 
          <!-- 収支総計 -->
-        <v-col class="overflow-x-auto" cols="12" sm="8">
+        <v-col class="overflow-x-auto" cols="12" sm="10">
           <div class="summary">
             <div class="mr-4">
               <table class="text-right">
@@ -77,14 +77,14 @@
               <v-progress-circular
                 class="mr-3"
                 :rotate="-90"
-                :size="100"
+                :size="80"
                 :width="8"
                 :value="category2[1]"
                 color="blue"
               >
                 {{ category2[0] }}
               </v-progress-circular>
-              <div class="text-center mr-3">＄{{ separate(category2[2]) }}</div>
+              <div class="text-center mr-3">＄{{ separate(Math.round((category2[2]) * 100) / 100) }}</div>
             </div>
 
 
@@ -93,20 +93,20 @@
               <v-progress-circular
                 class="mr-2"
                 :rotate="-90"
-                :size="100"
+                :size="80"
                 :width="8"
                 :value="category[1]"
                 color="red"
               >
                 {{ category[0] }}
               </v-progress-circular>
-              <div class="text-center mr-2">＄{{ separate(-category[2]) }}</div>
+              <div class="text-center mr-2">＄{{ separate(Math.round((-category[2]) * 100) / 100)  }}</div>
             </div>
           </div>
         </v-col>
 
         <!-- 検索フォーム -->
-        <v-col cols="3">
+        <v-col cols="2">
           <v-text-field
             v-model="search"
             append-icon="mdi-magnify"
@@ -121,7 +121,9 @@
    <Componentna :message="HAI"></Componentna>
   </div>-->
 
-
+カテゴリ1{{sum.categories}}
+<br>
+カテゴリ2{{sum.categories2}}
   
 
 
@@ -380,7 +382,7 @@ mounted(){
 <style>
 .summary {
   display: flex;
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   white-space: nowrap;
   line-height: 1.2rem;
 }
