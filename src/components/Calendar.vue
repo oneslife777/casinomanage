@@ -97,6 +97,7 @@ data () {
     yearMonth: `${year}-${month}`, 
     DATA:[],
     
+    
     }
   },
 
@@ -219,27 +220,29 @@ data () {
 
       //INCOMEの数値を合算
       let ALLINCOME = INCOME.reduce(function(sum, element){
-      return sum + element;
+      return Math.round((sum + element)*100)/100;
       }, 0);
-      Math.round(ALLINCOME * 100) / 100;
+      //Math.round(ALLINCOME * 100) / 100;
 
       //outgoデータのみ抽出
       const OUTGO = DDAY.map(x => x.outgo)
 
       //OUTGOの数値を合算
       let ALLOUTGO = OUTGO.reduce(function(sum, element){
-      return sum + element;
+      return Math.round((sum + element)*100)/100;
       }, 0);
-      Math.round(ALLOUTGO * 100) / 100;
+      //Math.round(ALLOUTGO * 100) / 100;
       
       var TOTAL = ALLINCOME - ALLOUTGO
+      Math.round(TOTAL * 100) / 100;
+    
 
       //合計金額の判定
-                if(TOTAL > 0){
-                COLORS = "blue"
-                }else{
-                COLORS = "red"  
-                }
+             //   if(TOTAL > 0){
+              //  COLORS = "blue"
+               // }else{
+               // COLORS = "red"  
+                //}
 
      NAME = "＄" + TOTAL
      
@@ -247,11 +250,11 @@ data () {
      events[y-1].name = NAME
      events[y]["color"] = COLORS
     //合計金額の判定
-      if(TOTAL > 0){
-      COLORS = "blue"
-      }else{
-      COLORS = "red"  
-      }
+     // if(TOTAL > 0){
+     // COLORS = "blue"
+     // }else{
+     // COLORS = "red"  
+     // }
       
      }
     }

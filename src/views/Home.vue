@@ -56,11 +56,11 @@
                 </tr>
                 <tr>
                   <td>利益：＄</td>
-                  <td>{{ separate(sum.income) }}</td>
+                  <td>{{ separate(Math.round((sum.income) * 100) / 100) }}</td>
                 </tr>
                 <tr>
                   <td>損失：＄</td>
-                  <td>{{ separate(sum.outgo) }}</td>
+                  <td>{{separate(Math.round((sum.outgo) * 100) / 100)}}</td>
                 </tr>
                 <tr>
                   <td>収支差：＄</td>
@@ -84,7 +84,7 @@
               >
                 {{ category2[0] }}
               </v-progress-circular>
-              <div class="text-center mr-3">{{ separate(category2[2]) }}</div>
+              <div class="text-center mr-3">＄{{ separate(category2[2]) }}</div>
             </div>
 
 
@@ -100,7 +100,7 @@
               >
                 {{ category[0] }}
               </v-progress-circular>
-              <div class="text-center mr-2">{{ separate(-category[2]) }}</div>
+              <div class="text-center mr-2">＄{{ separate(-category[2]) }}</div>
             </div>
           </div>
         </v-col>
