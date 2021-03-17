@@ -64,7 +64,7 @@
                 </tr>
                 <tr>
                   <td>収支差：＄</td>
-                  <td>{{ separate(sum.income - sum.outgo) }}</td>
+                  <td>{{ separate(Math.round((sum.income - sum.outgo) * 100) / 100) }}</td>
                 </tr>
                 <tr>
                   <td>日本円換算：￥</td>
@@ -72,6 +72,23 @@
                 </tr>
               </table>
             </div>
+
+            <div v-for="category2 in sum.categories2" :key="category2[0]">
+              <v-progress-circular
+                class="mr-3"
+                :rotate="-90"
+                :size="100"
+                :width="8"
+                :value="category2[1]"
+                color="blue"
+              >
+                {{ category2[0] }}
+              </v-progress-circular>
+              <div class="text-center mr-3">{{ separate(category2[2]) }}</div>
+            </div>
+
+
+
             <div v-for="category in sum.categories" :key="category[0]">
               <v-progress-circular
                 class="mr-2"
@@ -89,7 +106,7 @@
         </v-col>
 
         <!-- 検索フォーム -->
-        <v-col cols="4">
+        <v-col cols="3">
           <v-text-field
             v-model="search"
             append-icon="mdi-magnify"
@@ -202,7 +219,7 @@ export default {
   
       DATA:[],
       jpyUsd:0,
-      TOTAL:0
+      TOTAL:0,
     }
   },
 
@@ -250,12 +267,21 @@ mounted(){
       let outgo = 0
       const categoryOutgo = {}
       const categories = []
+      const categoryIncome = {}
+      const categories2 = []
             
       // 収支の合計とカテゴリ別の支出を計算
       for (const row of this.tableData) {
         //TABLEデータのインカムにデータがある場合
         if (row.income !== null) {
           income += row.income
+          if (categoryIncome[row.category]) {
+            categoryIncome[row.category] += row.income
+          } else {
+            categoryIncome[row.category] = row.income
+          }
+
+
         } else {
           //TABLEDATAのインカムにデータがない場合
           outgo += row.outgo
@@ -272,10 +298,19 @@ mounted(){
         const percent = parseInt((value / outgo) * 100)
         categories.push([category, percent, value])
       }
+
+      // カテゴリ別の支出を降順にソート
+      const sorted2 = Object.entries(categoryIncome).sort((a, b) => b[1] - a[1])
+      for (const [category2, value2] of sorted2) {
+        const percent2 = parseInt((value2 / income) * 100)
+        categories2.push([category2, percent2, value2])
+      }
+
       return {
         income,
         outgo,
-        categories
+        categories,
+        categories2,
       }
     }
   },

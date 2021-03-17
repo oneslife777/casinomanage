@@ -175,10 +175,10 @@ data () {
         
         //インカムのデータが空欄ではない時
         if(this.DATA[i].income !== null){
-          NAME = "＄" + String(this.DATA[i].income) +"　　" 
+          NAME = "＄" + String(this.DATA[i].income)
           COLORS = 'green'
         }else{
-          NAME = "＄" + String(-this.DATA[i].outgo) + "　　" 
+          NAME = "＄" + String(-this.DATA[i].outgo)
           COLORS = 'green'
         }
   
@@ -221,6 +221,7 @@ data () {
       let ALLINCOME = INCOME.reduce(function(sum, element){
       return sum + element;
       }, 0);
+      Math.round(ALLINCOME * 100) / 100;
 
       //outgoデータのみ抽出
       const OUTGO = DDAY.map(x => x.outgo)
@@ -229,6 +230,7 @@ data () {
       let ALLOUTGO = OUTGO.reduce(function(sum, element){
       return sum + element;
       }, 0);
+      Math.round(ALLOUTGO * 100) / 100;
       
       var TOTAL = ALLINCOME - ALLOUTGO
 

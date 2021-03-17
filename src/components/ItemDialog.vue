@@ -126,7 +126,7 @@
           <v-text-field
             v-model.number="amount"
             prefix="＄"
-            label="少数第2位以下は切り捨てされます"
+            label="少数第2位以下は四捨五入されます"
             patte rn="[0-9]*"
             :rules="amountRules"
              @change="onChangeAmount"
@@ -336,7 +336,7 @@ export default {
     onChangeAmount () {
       
     //this.amount = Number(this.amount).toFixed(2)
-    this.amount = Math.floor(this.amount * 100) / 100;
+    this.amount = Math.round(this.amount * 100) / 100;
         
     },
 
