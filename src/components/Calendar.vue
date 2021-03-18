@@ -31,6 +31,8 @@
         @change="getEvents"
         @click:event="showEvent"
         :event-more = false
+        :event-height="20"
+        :event-margin-bottom="0"
       ></v-calendar>
 
         <v-menu
@@ -239,25 +241,12 @@ data () {
       Math.round(TOTAL * 100) / 100;
       TOTAL = (TOTAL).toFixed(2)    
 
-      //合計金額の判定
-             //   if(TOTAL > 0){
-              //  COLORS = "blue"
-               // }else{
-               // COLORS = "red"  
-                //}
-
      NAME = "＄" + TOTAL
      
      COLORS = "white"
      events[y-1].name = NAME
      events[y]["color"] = COLORS
-    //合計金額の判定
-     // if(TOTAL > 0){
-     // COLORS = "blue"
-     // }else{
-     // COLORS = "red"  
-     // }
-      
+          
      }
     }
 

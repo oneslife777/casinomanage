@@ -120,14 +120,11 @@
      <!-- <div class="page">
    <Componentna :message="HAI"></Componentna>
   </div>-->
-<!--
-カテゴリ1{{sum.categories}}
-<br>
-カテゴリ2{{sum.categories2}}
- --> 
 
+<BarChart class="chart"  :chartData="datacollection" :options="options" height="300" />
 
 <Componentna :message="DATA"></Componentna>
+
 
 
       <Calendar/>
@@ -191,6 +188,8 @@ import ItemDialog from '../components/ItemDialog.vue'
 import DeleteDialog from '../components/DeleteDialog.vue'
 import Calendar from '../components/Calendar.vue'
 import axios from 'axios'
+import Vue from 'vue'
+import BarChart from '@/components/BarChart'
 
 
 export default {
@@ -199,6 +198,7 @@ export default {
   components: {
     ItemDialog,
     DeleteDialog,
+    BarChart,
     //Calendar,
     Componentna:  Calendar,
   },
@@ -218,14 +218,45 @@ export default {
       yearMonth: `${year}-${month}`,
       /** テーブルに表示させるデータ */
       tableData: [],
-  
+      TD:[],  
       DATA:[],
       jpyUsd:0,
       TOTAL:0,
+      MT:[],
+      isActive: false,
+      datacollection: null,
+      options: null
     }
   },
 
+  
+
 mounted(){
+  
+    this.fillData();
+    
+
+    this.options = {
+        responsive: true,
+        maintainAspectRatio: false,
+        legend: {
+          position: "top"
+        },
+        layout: {
+          padding: 20
+        },
+        scales: {
+          yAxes: [
+            {
+              ticks: {
+                beginAtZero: true, 
+                 
+              }
+            }
+          ]
+        }
+      }
+     
   
     axios.get('https://api.exchangeratesapi.io/latest')
         .then(function(res){
@@ -282,7 +313,7 @@ mounted(){
           } else {
             categoryIncome[row.category] = row.income
           }
-
+  
 
         } else {
           //TABLEDATAのインカムにデータがない場合
@@ -330,12 +361,87 @@ mounted(){
   
       if (list) {
         this.tableData = list
-        this.fetchAbData({yearMonth})
-        //this.DATA = this.abData[yearMonth]
+        this.fetchAbData({yearMonth}) 
+        this.GURAHU(); 
+        
+
       } else {
         await this.fetchAbData({ yearMonth })
         this.tableData = this.abData[yearMonth]
         //this.DATA = this.abData[yearMonth]
+        this.GURAHU();
+      }
+    },
+
+    GURAHU(){
+      var TD = this.tableData 
+      TD.sort(function(a,b){
+      if(a.date<b.date) return -1;
+      if(a.date > b.date) return 1;
+      return 0;
+      });
+      let DAYSUM =[]
+      let monthTT = []
+      
+
+      //日付ごとの収支取得する。まず日付ごとに配列を作成
+      for(var i=0; i < TD.length; i++) { 
+      var TODAY = TD[i].date //配列の1番目の日付を取得
+      var DAYS = TD.filter(item => item.date === TODAY) //日付ごとに配列生成
+      var incomeday = DAYS.map(x => x.income) //incomeデータのみ抽出
+      let incomesum = incomeday.reduce(function(sum, element){
+      return sum + element //incomeだけの合計
+      }, 0);
+      var outgoday = DAYS.map(x => x.outgo) //outgoデータのみ抽出
+      let outgosum = outgoday.reduce(function(sum, element){
+      return sum + element //outgoだけの合計
+      }, 0);
+      var daytotal = incomesum - outgosum
+      Math.round(daytotal * 100) / 100; //四捨五入
+      daytotal = (daytotal).toFixed(2) //1日ごとの合計
+
+      monthTT.push(daytotal)
+      let monthtotal = monthTT.reduce(function(sum, element){
+      return (parseFloat(sum) + parseFloat(element)) //outgoだけの合計
+      }, 0);
+      //this.MT = monthtotal
+      //this.TD = daytotal //TEST
+      //var STR = String(TD[i].date)
+      //var STRDATE = STR.slice( 8 )+"日"
+      //TD[i].date = STRDATE
+      DAYSUM.push({date:TD[i].date,SUM:monthtotal}) //配列に追加
+      // 重複を取り除く処理
+      var cleanList = DAYSUM.filter(function(v1,i1,a1){ 
+      return (a1.findIndex(function(v2){ 
+      return (v1.date===v2.date) 
+      }) === i1);
+      });
+
+      this.TD = cleanList
+      //this.TD.push(cleanList)
+      } 
+      
+//      this.isActive=true
+      this.CHART()
+    },
+
+    CHART(){
+    //this.isActive = true
+
+    this.datacollection = {
+        labels:  this.TD.map(item => item.date),
+        datasets: [
+          {
+            label: "月間収支",
+            data: this.TD.map(item => item.SUM),
+             
+            //ここに「キー(プロパティ名)：値」で指定していく
+            backgroundColor: 'green',
+            borderWidth: '2',
+            borderColor: 'green',
+            barPercentage: 0.5
+          }
+        ]
       }
     },
 
@@ -345,6 +451,26 @@ mounted(){
     this.fetchAbData({yearMonth})
     this.DATA = this.abData[yearMonth]
     this.DATA.date = this.DATA.date.replace(/-/g,"/")
+   
+    },
+
+    fillData() {
+      this.datacollection = {
+        labels:  this.TD.map(item => item.date),
+        datasets: [
+          {
+            label: "収支",
+            data: this.TD.map(item => item.SUM),
+             
+            //ここに「キー(プロパティ名)：値」で指定していく
+            backgroundColor: 'green',
+            borderWidth: '2',
+            borderColor: 'green',
+            barPercentage: 0.5
+          }
+        ]
+      }
+      
     },
 
     /**
@@ -377,6 +503,7 @@ mounted(){
     this.DATAHYOUJI()
   }
 }
+Vue.component('bar-chart', BarChart)
 </script>
 
 <style>
@@ -386,4 +513,5 @@ mounted(){
   white-space: nowrap;
   line-height: 1.2rem;
 }
+
 </style>
