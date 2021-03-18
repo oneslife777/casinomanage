@@ -349,6 +349,7 @@ export default {
         this.jpyUsd = res.data.rates.JPY/res.data.rates.USD
         this.jpyUsd = this.jpyUsd.toFixed(2)
         this.amount = Number((this.amount2 /this.jpyUsd).toFixed(2))
+        this.amount = Math.round(this.amount * 100) / 100;
         }.bind(this))
         
     },
@@ -362,11 +363,12 @@ export default {
           var BTC = this.bpi.replace(/,/g, '');
           parseInt(BTC, 10);
           BTC = Number(BTC).toFixed(2)
-          BTC = (BTC / 1000).toFixed(0)
+          BTC = (BTC / 1000).toFixed(2)
 
 
 
         this.amount = Number(BTC * this.amount3)
+        this.amount = Math.round(this.amount * 100) / 100;
     }.bind(this))
         
     },
