@@ -120,7 +120,7 @@
      <!-- <div class="page">
    <Componentna :message="HAI"></Componentna>
   </div>-->
-
+<v-btn type="button" color="blue" class="white--text" @click="BTN"  id="btn">グラフを更新</v-btn>
 <BarChart class="chart"  :chartData="datacollection" :options="options" height="300" />
 
 <Componentna :message="DATA"></Componentna>
@@ -234,7 +234,6 @@ export default {
 mounted(){
   
     this.fillData();
-    
 
     this.options = {
         responsive: true,
@@ -349,7 +348,7 @@ mounted(){
         var persentR = ((reds[c].[1] / redsum)*100).toFixed(0)
         reds[c].push(persentR)
        } 
-
+      
          return {
         blues,
         reds,
@@ -426,17 +425,21 @@ mounted(){
         this.tableData = list
         this.fetchAbData({yearMonth}) 
         this.GURAHU(); 
-        this.CASINOTOTAL()
+       
 
       } else {
         await this.fetchAbData({ yearMonth })
         this.tableData = this.abData[yearMonth]
         //this.DATA = this.abData[yearMonth]
         this.GURAHU();
-        this.CASINOTOTAL();
+        
       }
     },
 
+    BTN(){
+      //this.isActive=true
+      this.fillData()
+    },
   
     GURAHU(){
       var TD = this.tableData 
@@ -482,28 +485,11 @@ mounted(){
       
       } 
 
-      this.CHART()
+      this.CHART();
+      
     },
 
-    CHART(){
-    
-    this.datacollection = {
-        labels:  this.TD.map(item => item.date.slice( 8 )+"日"),
-        datasets: [
-          {
-            label: "月間収支",
-            data: this.TD.map(item => item.SUM),
-             
-            //ここに「キー(プロパティ名)：値」で指定していく
-            backgroundColor: 'green',
-            borderWidth: '2',
-            borderColor: 'green',
-            barPercentage: 0.5
-          }
-        ]
-      }
-    },
-
+  
     DATAHYOUJI(){
     const yearMonth = this.yearMonth
     
@@ -528,9 +514,28 @@ mounted(){
             barPercentage: 0.5
           }
         ]
-      }
-      
+      } 
     },
+
+    CHART(){
+    
+    this.datacollection = {
+        labels:  this.TD.map(item => item.date.slice( 8 )+"日"),
+        datasets: [
+          {
+            label: "月間収支",
+            data: this.TD.map(item => item.SUM),
+             
+            //ここに「キー(プロパティ名)：値」で指定していく
+            backgroundColor: 'green',
+            borderWidth: '2',
+            borderColor: 'green',
+            barPercentage: 0.5
+          }
+        ]
+      }
+    },
+    
 
     /**
      * 数字を3桁区切りにして返します。
