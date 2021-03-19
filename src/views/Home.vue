@@ -46,7 +46,7 @@
         </v-col>
 
          <!-- 収支総計 -->
-        <v-col class="overflow-x-auto" cols="12" sm="10">
+        <v-col class="overflow-x-auto" cols="12" sm="9">
           <div class="summary">
             <div class="mr-4">
               <table class="text-right">
@@ -73,40 +73,40 @@
               </table>
             </div>
 
-            <div v-for="category2 in sum.categories2" :key="category2[0]">
+            <div v-for="blues in CASINOTOTAL.blues" :key="blues[0]">
               <v-progress-circular
                 class="mr-3"
                 :rotate="-90"
                 :size="80"
                 :width="8"
-                :value="category2[1]"
+                :value="blues[2]"
                 color="blue"
               >
-                {{ category2[0] }}
+                {{ blues[0] }}
               </v-progress-circular>
-              <div class="text-center mr-3">＄{{ separate(Math.round((category2[2]) * 100) / 100) }}</div>
+              <div class="text-center mr-3">＄{{ separate(Math.round((blues[1]) * 100) / 100) }}</div>
             </div>
 
 
 
-            <div v-for="category in sum.categories" :key="category[0]">
+            <div v-for="reds in CASINOTOTAL.reds" :key="reds[0]">
               <v-progress-circular
                 class="mr-2"
                 :rotate="-90"
                 :size="80"
                 :width="8"
-                :value="category[1]"
+                :value="reds[2]"
                 color="red"
               >
-                {{ category[0] }}
+                {{ reds[0] }}
               </v-progress-circular>
-              <div class="text-center mr-2">＄{{ separate(Math.round((-category[2]) * 100) / 100)  }}</div>
+              <div class="text-center mr-2">＄{{ separate(Math.round((reds[1]) * 100) / 100)  }}</div>
             </div>
           </div>
         </v-col>
 
         <!-- 検索フォーム -->
-        <v-col cols="2">
+        <v-col cols="3">
           <v-text-field
             v-model="search"
             append-icon="mdi-magnify"
@@ -293,6 +293,69 @@ mounted(){
       return { itemsPerPageText: '', itemsPerPageOptions: [] }
     },
  
+ CASINOTOTAL(){
+      var MT = this.tableData
+      let CASINOSUM =[]
+      
+      for(var y=0; y < MT.length; y++) { 
+      var CASINO = MT[y].category //配列の1番目のカジノ名を取得
+      var CASINOG = MT.filter(item => item.category === CASINO) //日付ごとに配列生成
+      var incomeCASINO = CASINOG.map(x => x.income) //incomeデータのみ抽出
+      let incomesumC = incomeCASINO.reduce(function(sum, element){
+      return sum + element //incomeだけの合計
+      }, 0);
+      var outgoCASINO = CASINOG.map(x => x.outgo) //outgoデータのみ抽出
+      let outgosumC = outgoCASINO.reduce(function(sum, element){
+      return sum + element //outgoだけの合計
+      }, 0);
+      var Ctotal = incomesumC - outgosumC
+      Math.round(Ctotal * 100) / 100; //四捨五入
+      Ctotal = (Ctotal).toFixed(2) //1日ごとの合計
+
+      CASINOSUM.push({name:MT[y].category,SUM:Ctotal}) //配列に追加
+      var cleanListC = CASINOSUM.filter(function(v1,i1,a1){ 
+      return (a1.findIndex(function(v2){ 
+      return (v1.name===v2.name) 
+      }) === i1);
+      });
+      }
+      
+      var reds = []
+      var blues = []
+//      var reds2 = []
+      //var blues2 = []
+      for(var x=0; x < cleanListC.length; x++) { 
+      if(cleanListC[x].SUM < 0){
+          reds.push([cleanListC[x].name,cleanListC[x].SUM])      
+      }else{
+          blues.push([cleanListC[x].name,cleanListC[x].SUM])
+      }
+      }
+   
+       for(var z=0; z < blues.length; z++) {
+        var bluemap = blues.map(x => x.[1]) 
+        let bluesum = bluemap.reduce(function(sum, element){
+        return (parseFloat(sum) + parseFloat(element)) //outgoだけの合計
+        }, 0);
+        var persentB = ((blues[z].[1] / bluesum)*100).toFixed(0)
+        blues[z].push(persentB)
+       } 
+
+       for(var c=0; c < reds.length; c++) {
+        var redmap = reds.map(x => x.[1]) 
+        let redsum = redmap.reduce(function(sum, element){
+        return (parseFloat(sum) + parseFloat(element)) //outgoだけの合計
+        }, 0);
+        var persentR = ((reds[c].[1] / redsum)*100).toFixed(0)
+        reds[c].push(persentR)
+       } 
+
+         return {
+        blues,
+        reds,
+      }
+
+    },
 
    /** 収支総計 */
     sum () {
@@ -363,16 +426,18 @@ mounted(){
         this.tableData = list
         this.fetchAbData({yearMonth}) 
         this.GURAHU(); 
-        
+        this.CASINOTOTAL()
 
       } else {
         await this.fetchAbData({ yearMonth })
         this.tableData = this.abData[yearMonth]
         //this.DATA = this.abData[yearMonth]
         this.GURAHU();
+        this.CASINOTOTAL();
       }
     },
 
+  
     GURAHU(){
       var TD = this.tableData 
       TD.sort(function(a,b){
@@ -404,11 +469,7 @@ mounted(){
       let monthtotal = monthTT.reduce(function(sum, element){
       return (parseFloat(sum) + parseFloat(element)) //outgoだけの合計
       }, 0);
-      //this.MT = monthtotal
-      //this.TD = daytotal //TEST
-      //var STR = String(TD[i].date)
-      //var STRDATE = STR.slice( 8 )+"日"
-      //TD[i].date = STRDATE
+      
       DAYSUM.push({date:TD[i].date,SUM:monthtotal}) //配列に追加
       // 重複を取り除く処理
       var cleanList = DAYSUM.filter(function(v1,i1,a1){ 
@@ -418,18 +479,16 @@ mounted(){
       });
 
       this.TD = cleanList
-      //this.TD.push(cleanList)
-      } 
       
-//      this.isActive=true
+      } 
+
       this.CHART()
     },
 
     CHART(){
-    //this.isActive = true
-
+    
     this.datacollection = {
-        labels:  this.TD.map(item => item.date),
+        labels:  this.TD.map(item => item.date.slice( 8 )+"日"),
         datasets: [
           {
             label: "月間収支",
@@ -456,7 +515,7 @@ mounted(){
 
     fillData() {
       this.datacollection = {
-        labels:  this.TD.map(item => item.date),
+        labels:  this.TD.map(item => item.date.slice( 8 )+"日"),
         datasets: [
           {
             label: "収支",
