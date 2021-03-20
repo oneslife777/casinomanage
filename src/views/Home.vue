@@ -77,7 +77,7 @@
               <v-progress-circular
                 class="mr-3"
                 :rotate="-90"
-                :size="80"
+                :size="100"
                 :width="8"
                 :value="blues[2]"
                 color="blue"
@@ -93,7 +93,7 @@
               <v-progress-circular
                 class="mr-2"
                 :rotate="-90"
-                :size="80"
+                :size="100"
                 :width="8"
                 :value="reds[2]"
                 color="red"
@@ -120,8 +120,11 @@
      <!-- <div class="page">
    <Componentna :message="HAI"></Componentna>
   </div>-->
-<v-btn type="button" color="blue" class="white--text" @click="BTN"  id="btn">グラフを更新</v-btn>
-<BarChart class="chart"  :chartData="datacollection" :options="options" height="300" />
+<v-btn type="button" color="blue" class="white--text" @click="BTN"  id="btn">グラフを表示</v-btn>
+<v-col>
+  <v-spacer/>
+</v-col>
+<BarChart class="chart" v-show="isActive"  :chartData="datacollection" :options="options" height="300" />
 
 <Componentna :message="DATA"></Componentna>
 
@@ -232,7 +235,7 @@ export default {
   
 
 mounted(){
-  
+    this.GURAHU();
     this.fillData();
 
     this.options = {
@@ -425,6 +428,8 @@ mounted(){
         this.tableData = list
         this.fetchAbData({yearMonth}) 
         this.GURAHU(); 
+        this.CASINOTOTAL()
+        
        
 
       } else {
@@ -432,12 +437,14 @@ mounted(){
         this.tableData = this.abData[yearMonth]
         //this.DATA = this.abData[yearMonth]
         this.GURAHU();
+        this.CASINOTOTAL()
         
       }
     },
 
     BTN(){
-      //this.isActive=true
+      this.isActive=true
+      this.GURAHU()
       this.fillData()
     },
   
@@ -485,8 +492,27 @@ mounted(){
       
       } 
 
-      this.CHART();
+      this.CHART()
       
+    },
+
+    CHART(){
+    //this.isActive = true
+    this.datacollection = {
+        labels:  this.TD.map(item => item.date.slice( 8 )+"日"),
+        datasets: [
+          {
+            label: "月間収支",
+            data: this.TD.map(item => item.SUM),
+             
+            //ここに「キー(プロパティ名)：値」で指定していく
+            backgroundColor: 'green',
+            borderWidth: '2',
+            borderColor: 'green',
+            barPercentage: 0.5
+          }
+        ]
+    }
     },
 
   
@@ -504,7 +530,7 @@ mounted(){
         labels:  this.TD.map(item => item.date.slice( 8 )+"日"),
         datasets: [
           {
-            label: "収支",
+            label: "収支(月間)",
             data: this.TD.map(item => item.SUM),
              
             //ここに「キー(プロパティ名)：値」で指定していく
@@ -517,25 +543,7 @@ mounted(){
       } 
     },
 
-    CHART(){
-    
-    this.datacollection = {
-        labels:  this.TD.map(item => item.date.slice( 8 )+"日"),
-        datasets: [
-          {
-            label: "月間収支",
-            data: this.TD.map(item => item.SUM),
-             
-            //ここに「キー(プロパティ名)：値」で指定していく
-            backgroundColor: 'green',
-            borderWidth: '2',
-            borderColor: 'green',
-            barPercentage: 0.5
-          }
-        ]
-      }
-    },
-    
+       
 
     /**
      * 数字を3桁区切りにして返します。
