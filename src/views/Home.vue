@@ -73,7 +73,9 @@
               </table>
             </div>
 
-            <div v-for="blues in CASINOTOTAL.blues" :key="blues[0]">
+            
+            
+            <div v-for="blues in CTB" :key="blues[0]">
               <v-progress-circular
                 class="mr-3"
                 :rotate="-90"
@@ -86,10 +88,9 @@
               </v-progress-circular>
               <div class="text-center mr-3">＄{{ separate(Math.round((blues[1]) * 100) / 100) }}</div>
             </div>
-
-
-
-            <div v-for="reds in CASINOTOTAL.reds" :key="reds[0]">
+            
+            
+            <div v-for="reds in CTR" :key="reds[0]">
               <v-progress-circular
                 class="mr-2"
                 :rotate="-90"
@@ -120,6 +121,7 @@
      <!-- <div class="page">
    <Componentna :message="HAI"></Componentna>
   </div>-->
+
 <v-btn type="button" color="blue" class="white--text" @click="BTN"  id="btn">グラフを表示</v-btn>
 <v-col>
   <v-spacer/>
@@ -226,6 +228,8 @@ export default {
       jpyUsd:0,
       TOTAL:0,
       MT:[],
+      CTR:[],
+      CTB:[],
       isActive: false,
       datacollection: null,
       options: null
@@ -295,69 +299,6 @@ mounted(){
       return { itemsPerPageText: '', itemsPerPageOptions: [] }
     },
  
- CASINOTOTAL(){
-      var MT = this.tableData
-      let CASINOSUM =[]
-      
-      for(var y=0; y < MT.length; y++) { 
-      var CASINO = MT[y].category //配列の1番目のカジノ名を取得
-      var CASINOG = MT.filter(item => item.category === CASINO) //日付ごとに配列生成
-      var incomeCASINO = CASINOG.map(x => x.income) //incomeデータのみ抽出
-      let incomesumC = incomeCASINO.reduce(function(sum, element){
-      return sum + element //incomeだけの合計
-      }, 0);
-      var outgoCASINO = CASINOG.map(x => x.outgo) //outgoデータのみ抽出
-      let outgosumC = outgoCASINO.reduce(function(sum, element){
-      return sum + element //outgoだけの合計
-      }, 0);
-      var Ctotal = incomesumC - outgosumC
-      Math.round(Ctotal * 100) / 100; //四捨五入
-      Ctotal = (Ctotal).toFixed(2) //1日ごとの合計
-
-      CASINOSUM.push({name:MT[y].category,SUM:Ctotal}) //配列に追加
-      var cleanListC = CASINOSUM.filter(function(v1,i1,a1){ 
-      return (a1.findIndex(function(v2){ 
-      return (v1.name===v2.name) 
-      }) === i1);
-      });
-      }
-      
-      var reds = []
-      var blues = []
-//      var reds2 = []
-      //var blues2 = []
-      for(var x=0; x < cleanListC.length; x++) { 
-      if(cleanListC[x].SUM < 0){
-          reds.push([cleanListC[x].name,cleanListC[x].SUM])      
-      }else{
-          blues.push([cleanListC[x].name,cleanListC[x].SUM])
-      }
-      }
-   
-       for(var z=0; z < blues.length; z++) {
-        var bluemap = blues.map(x => x.[1]) 
-        let bluesum = bluemap.reduce(function(sum, element){
-        return (parseFloat(sum) + parseFloat(element)) //outgoだけの合計
-        }, 0);
-        var persentB = ((blues[z].[1] / bluesum)*100).toFixed(0)
-        blues[z].push(persentB)
-       } 
-
-       for(var c=0; c < reds.length; c++) {
-        var redmap = reds.map(x => x.[1]) 
-        let redsum = redmap.reduce(function(sum, element){
-        return (parseFloat(sum) + parseFloat(element)) //outgoだけの合計
-        }, 0);
-        var persentR = ((reds[c].[1] / redsum)*100).toFixed(0)
-        reds[c].push(persentR)
-       } 
-      
-         return {
-        blues,
-        reds,
-      }
-
-    },
 
    /** 収支総計 */
     sum () {
@@ -413,6 +354,8 @@ mounted(){
     }
   },
 
+   
+
   methods: {
     ...mapActions([
       /** 家計簿データを取得 */
@@ -440,6 +383,66 @@ mounted(){
         this.CASINOTOTAL()
         
       }
+    },
+
+    CASINOTOTAL(){
+      var MT = this.tableData
+      let CASINOSUM =[]
+      
+      for(var y=0; y < MT.length; y++) { 
+      var CASINO = MT[y].category //配列の1番目のカジノ名を取得
+      var CASINOG = MT.filter(item => item.category === CASINO) //日付ごとに配列生成
+      var incomeCASINO = CASINOG.map(x => x.income) //incomeデータのみ抽出
+      let incomesumC = incomeCASINO.reduce(function(sum, element){
+      return sum + element //incomeだけの合計
+      }, 0);
+      var outgoCASINO = CASINOG.map(x => x.outgo) //outgoデータのみ抽出
+      let outgosumC = outgoCASINO.reduce(function(sum, element){
+      return sum + element //outgoだけの合計
+      }, 0);
+      var Ctotal = incomesumC - outgosumC
+      Math.round(Ctotal * 100) / 100; //四捨五入
+      Ctotal = (Ctotal).toFixed(2) //1日ごとの合計
+
+      CASINOSUM.push({name:MT[y].category,SUM:Ctotal}) //配列に追加
+      var cleanListC = CASINOSUM.filter(function(v1,i1,a1){ 
+      return (a1.findIndex(function(v2){ 
+      return (v1.name===v2.name) 
+      }) === i1);
+      });
+      }
+      
+      var reds = []
+      var blues = []
+//      var reds2 = []
+      //var blues2 = []
+      for(var x=0; x < cleanListC.length; x++) { 
+      if(cleanListC[x].SUM < 0){
+          reds.push([cleanListC[x].name,cleanListC[x].SUM])      
+      }else{
+          blues.push([cleanListC[x].name,cleanListC[x].SUM])
+      }
+      }
+   
+       for(var z=0; z < blues.length; z++) {
+        var bluemap = blues.map(x => x.[1]) 
+        let bluesum = bluemap.reduce(function(sum, element){
+        return (parseFloat(sum) + parseFloat(element)) //outgoだけの合計
+        }, 0);
+        var persentB = ((blues[z].[1] / bluesum)*100).toFixed(0)
+        blues[z].push(persentB)
+       } 
+
+       for(var c=0; c < reds.length; c++) {
+        var redmap = reds.map(x => x.[1]) 
+        let redsum = redmap.reduce(function(sum, element){
+        return (parseFloat(sum) + parseFloat(element)) //outgoだけの合計
+        }, 0);
+        var persentR = ((reds[c].[1] / redsum)*100).toFixed(0)
+        reds[c].push(persentR)
+       } 
+      this.CTR = reds
+      this.CTB = blues
     },
 
     BTN(){
@@ -572,7 +575,8 @@ mounted(){
   },
   created () {
     this.updateTable(),
-    this.DATAHYOUJI()
+    this.DATAHYOUJI(),
+    this.CASINOTOTAL()
   }
 }
 Vue.component('bar-chart', BarChart)
