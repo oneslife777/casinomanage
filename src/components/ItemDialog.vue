@@ -45,6 +45,7 @@
               <v-btn text color="primary" @click="$refs.menu.save(date)">選択</v-btn>
             </v-date-picker>
           </v-menu>
+           <v-col><v-spacer/></v-col>
           <!-- タイトル --
           <v-text-field
             label="タイトル"
@@ -52,6 +53,26 @@
             :counter="20"
             :rules="titleRules"
           />-->
+          
+          <!-- カテゴリ -->
+          <v-select
+            label="カジノ名"
+            v-model="category"
+            :items="categoryItems"
+            hide-details
+          />
+          <v-col cols="8">
+          <!-- タグ -->
+          <v-select
+            label="タグ"
+            v-model="tags"
+            :items="tagItems"
+            multiple
+            chips
+            :rules="[tagRule]"
+          />
+          </v-col>
+
           <!-- 収支 -->
           <v-radio-group
             row
@@ -62,32 +83,23 @@
             <v-radio label="勝ち" value="income"/>
             <v-radio label="負け" value="outgo"/>
           </v-radio-group>
-          <!-- カテゴリ -->
-          <v-select
-            label="カジノ名"
-            v-model="category"
-            :items="categoryItems"
-            hide-details
-          />
-          <!-- タグ -->
-          <v-select
-            label="タグ"
-            v-model="tags"
-            :items="tagItems"
-            multiple
-            chips
-            :rules="[tagRule]"
-          />
+
+
+          <v-row  style="height: 45px;" >
+            <v-col style="width: 320px;" >
           <!-- 通貨選択-->    
           <v-switch  
           v-model="agree" 
           true-value="yes" 
           false-value="no" 
           color="primary"
-          label="日本円で入力する"
+          label="円で入力する"
           @change="disp2">
           </v-switch>
-
+            
+          <v-spacer/>
+</v-col>
+ <v-col style="width: 320px;" >
           <v-switch  
           v-model="agree2" 
           true-value="yes" 
@@ -95,38 +107,141 @@
           color="primary"
           label="BTCで入力する"
           @change="disp3">
-          </v-switch>
-         
+          </v-switch></v-col>
+</v-row>
+           <v-row  style="height: 20px;" >
+             <v-col cols="12" style="width: 500px;">
+          <v-switch  
+          v-model="agree3" 
+          true-value="yes" 
+          false-value="no" 
+          color="primary"
+          label="開始残高と終了残高で＄入力する"
+          @change="disp4">
+          </v-switch></v-col></v-row>
+          
+
+         <v-row  style="width: 320px;" >
+           <v-col cols="6">
           <!--JPY通貨入力-->
+          <v-text-field           
+            prefix="￥"
+            v-model.number="amount2JS"
+            v-if="isActive2"
+            outlined
+            clearable
+            label="開始残高"
+            @change="onChangeTuukaJS"
+            patte rn="[0-9]*"
+            :rules="amountRulesJPY"
+          ></v-text-field>
+           </v-col><v-spacer/>
+           <v-col cols="6">
+           <v-text-field           
+            prefix="￥"
+            v-model.number="amount2JE"
+            v-if="isActive4"
+            outlined
+            clearable
+            label="終了残高"
+            @change="onChangeTuukaJE"
+            patte rn="[0-9]*"
+            :rules="amountRulesJPY"
+          ></v-text-field>
+           </v-col>
+         </v-row>
+
             <v-text-field           
             prefix="￥"
             v-model.number="amount2"
             v-if="isActive2"
             outlined
             clearable
-            label="ドルに自動換算されます※小数点以下省略"
+            label="直接入力 ※ドルに自動換算されます"
             @change="onChangeTuuka"
             patte rn="[0-9]*"
             :rules="amountRulesJPY"
           ></v-text-field>
 
+           <v-row  style="width: 320px;" >
+           <v-col cols="6">
            <!--BTC通貨入力-->
+           <v-text-field           
+            prefix="mBTC"
+            v-model.number="amount3BS"
+            v-if="isActive3"
+            outlined
+            clearable
+            label="開始残高"
+            @change="onChangeTuukaBS"
+            patte rn="[0-9]*"
+            :rules="amountRules"
+          ></v-text-field>
+
+          </v-col><v-spacer/>
+           <v-col cols="6">
+
+          <v-text-field           
+            prefix="mBTC"
+            v-model.number="amount3BE"
+            v-if="isActive5"
+            outlined
+            clearable
+            label="終了残高"
+            @change="onChangeTuukaBE"
+            patte rn="[0-9]*"
+            :rules="amountRules"
+          ></v-text-field>
+          </v-col>
+         </v-row>
+
             <v-text-field           
             prefix="mBTC"
             v-model.number="amount3"
             v-if="isActive3"
             outlined
             clearable
-            label="ドルに自動換算されます※小数点以下省略"
+            label="直接入力 ※ドルに自動換算されます"
             @change="onChangeTuuka2"
             patte rn="[0-9]*"
             :rules="amountRules"
           ></v-text-field>
           
+
+          <v-row  style="width: 320px;" >
+           <v-col cols="6">
+          <v-text-field
+            v-model.number="amountS"
+            prefix="＄"
+            label="開始残高"
+            outlined
+            clearable
+            v-if="isActive7"
+            patte rn="[0-9]*"
+            :rules="amountRules"
+             @change="onChangeAmountS"
+          />
+          </v-col><v-spacer/>
+           <v-col cols="6">
+
+          <v-text-field
+            v-model.number="amountE"
+            prefix="＄"
+            v-if="isActive6"
+            label="終了残高"
+            outlined
+            clearable
+            patte rn="[0-9]*"
+            :rules="amountRules"
+             @change="onChangeAmountE"
+          /></v-col>
+         </v-row>
+
+          
           <v-text-field
             v-model.number="amount"
             prefix="＄"
-            label="少数第2位以下は四捨五入されます"
+            label="直接入力 ※少数第2位以下は四捨五入されます"
             patte rn="[0-9]*"
             :rules="amountRules"
              @change="onChangeAmount"
@@ -206,12 +321,24 @@ export default {
       DORUEN: 'ドル円',
       DORUTEXT:false,
       isActive3: false,
+      isActive4:false,
       isActive2: false,
+      isActive5:false,
+      isActive6:false,
       Active:false,
       agree:false,
-      agree2:false,      
+      agree2:false,   
+      agree3:false,
+      isActive7:false,   
       amount2:0,
       amount3:0,
+      amount2JS:0,
+      amount2JE:0,
+      amount3BS:0,
+      amount3BE:0,
+      amountS:'',
+      amountE:0,
+      
       /** 金額 */
       amount: 0,
       /** メモ */
@@ -321,14 +448,21 @@ export default {
     disp2(){
      
      if(this.agree === "yes"){this.isActive2=true}
-     else{this.isActive2=false}
+     else{this.isActive2=false, this.isActive4=false}
      
     },
 
     disp3(){
      
      if(this.agree2 === "yes"){this.isActive3=true}
-     else{this.isActive3=false}
+     else{this.isActive3=false, this.isActive5=false}
+     
+    },
+
+    disp4(){
+     
+     if(this.agree3 === "yes"){this.isActive7=true}
+     else{this.isActive7=false, this.isActive6=false}
      
     },
 
@@ -373,6 +507,90 @@ export default {
         
     },
 
+    onChangeAmountS () {
+     
+     this.isActive6 = true
+    },
+
+    onChangeAmountE () {
+
+      this.amount = this.amountE - this.amountS
+      if(this.amount > 0){
+        this.inout = 'income'
+      }else{
+        this.inout = 'outgo'
+        this.amount =Math.abs(this.amount)
+      }     
+    },
+
+    onChangeTuukaJS () {
+      if(this.agree === "yes"){this.isActive4=true}
+     else{this.isActive4=false}
+
+     if(this.isActive2 == false){
+       this.isActive4 = false
+     }  
+    },
+
+    onChangeTuukaJE () {
+
+      this.amount2 = this.amount2JE - this.amount2JS
+      if(this.amount2 > 0){
+        this.inout = 'income'
+      }else{
+        this.inout = 'outgo'
+        this.amount2 =Math.abs(this.amount2)
+      }
+
+
+      axios.get('https://api.exchangeratesapi.io/latest')
+        .then(function(res){
+        this.jpyEur = res.data.rates.JPY
+        this.jpyUsd = res.data.rates.JPY/res.data.rates.USD
+        this.jpyUsd = this.jpyUsd.toFixed(2)
+        this.amount = Number((this.amount2 /this.jpyUsd).toFixed(2))
+        this.amount = Math.round(this.amount * 100) / 100;
+        }.bind(this))
+     
+    },
+
+    onChangeTuukaBS () {
+      if(this.agree2 === "yes"){this.isActive5=true}
+     else{this.isActive5=false}
+
+     if(this.isActive3 == false){
+       this.isActive5 = false
+     }  
+    },
+
+    onChangeTuukaBE () {
+
+      this.amount3 = this.amount3BE - this.amount3BS
+      if(this.amount3 > 0){
+        this.inout = 'income'
+      }else{
+        this.inout = 'outgo'
+        this.amount3 =Math.abs(this.amount3)
+      }
+
+
+     axios.get('https://api.coindesk.com/v1/bpi/currentprice.json')
+    .then(function(res){
+        this.bpi = res.data.bpi.USD.rate
+
+          var BTC = this.bpi.replace(/,/g, '');
+          parseInt(BTC, 10);
+          BTC = Number(BTC).toFixed(2)
+          BTC = (BTC / 1000).toFixed(2)
+
+
+
+        this.amount = Number(BTC * this.amount3)
+        this.amount = Math.round(this.amount * 100) / 100;
+    }.bind(this))
+     
+    },
+
 
     /** フォームの内容を初期化します */
     resetForm (item = {}) {
@@ -386,6 +604,17 @@ export default {
       this.tuuka = 'japan'
       this.isActive=false
       this.isActive2=false
+      this.isActive4 = false
+      this.amount2JS = 0
+      this.amount2JE = 0
+      this.isActive5 = false
+      this.isActive6 = 0
+      this.amountS = ''
+      this.amountE = 0
+      this.amount3BS = 0
+      this.amount3BE = 0
+      this.agree2 = false
+      this.agree3 = false
       this.agree = false
       axios.get('https://api.exchangeratesapi.io/latest')
     .then(function(res){

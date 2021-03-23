@@ -122,9 +122,17 @@
    <Componentna :message="HAI"></Componentna>
   </div>-->
 
+
+
+
 <v-btn type="button" color="blue" class="white--text" @click="BTN"  id="btn">グラフを表示</v-btn>
+
 <v-col>
-  <v-spacer/>
+
+
+
+ 
+ <v-spacer/>
 </v-col>
 <BarChart class="chart" v-show="isActive"  :chartData="datacollection" :options="options" height="300" />
 
