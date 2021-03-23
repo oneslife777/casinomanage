@@ -109,7 +109,7 @@
           @change="disp3">
           </v-switch></v-col>
 </v-row>
-           <v-row  style="height: 20px;" >
+           <v-row  style="height: 50px;" >
              <v-col cols="12" style="width: 500px;">
           <v-switch  
           v-model="agree3" 
@@ -121,7 +121,7 @@
           </v-switch></v-col></v-row>
           
 
-         <v-row  style="width: 320px;" >
+         <v-row  style="width: 400px;" >
            <v-col cols="6">
           <!--JPY通貨入力-->
           <v-text-field           
@@ -163,7 +163,7 @@
             :rules="amountRulesJPY"
           ></v-text-field>
 
-           <v-row  style="width: 320px;" >
+           <v-row  style="width: 400px;" >
            <v-col cols="6">
            <!--BTC通貨入力-->
            <v-text-field           
@@ -208,7 +208,7 @@
           ></v-text-field>
           
 
-          <v-row  style="width: 320px;" >
+          <v-row  style="width: 400px;" >
            <v-col cols="6">
           <v-text-field
             v-model.number="amountS"
