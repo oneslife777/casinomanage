@@ -565,7 +565,7 @@ export default {
 
     onChangeTuukaBE () {
 
-      this.amount3 = this.amount3BE - this.amount3BS
+      this.amount3 = (this.amount3BE - this.amount3BS).toFixed(2)
       if(this.amount3 > 0){
         this.inout = 'income'
       }else{
