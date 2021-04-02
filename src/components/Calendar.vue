@@ -8,10 +8,10 @@
       <v-btn outlined small class="ma-4" @click="setToday" color="white">
         今日
       </v-btn>
-      <v-btn icon color="white" @click="$refs.calendar.prev()">
+      <v-btn icon color="white" @click="$refs.calendar.prev(); DATAOPEN()">
         <v-icon>mdi-chevron-left</v-icon>
       </v-btn>
-      <v-btn icon color="white" @click="$refs.calendar.next()">
+      <v-btn icon color="white" @click="$refs.calendar.next(); DATAOPEN()">
         <v-icon>mdi-chevron-right</v-icon>
       </v-btn>
       <v-toolbar-title class="white--text" >{{ title }}</v-toolbar-title>
@@ -81,7 +81,7 @@ import { mapState, mapActions } from 'vuex'
 
 export default {
 name:'Calendar',
-//props: ['message'],
+props: ['message'],
 
 data () {
     
@@ -127,14 +127,15 @@ data () {
     async DATAOPEN(){
     const yearMonth = this.yearMonth
     const list = this.abData[yearMonth]
+    
 
     if (list) {
     this.DATA = list
+    this.DATA = this.message
     this.fetchAbData({yearMonth})}
     else {
         await this.fetchAbData({ yearMonth })
         this.DATA = this.abData[yearMonth]
-        this.getEvents();
       }
     },
 
@@ -163,7 +164,7 @@ data () {
     },
    
     getEvents() {
-     
+   
       const events = []
       //var y = 0
       var COLORS = 'blue'

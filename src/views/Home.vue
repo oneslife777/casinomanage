@@ -136,7 +136,7 @@
 </v-col>
 <BarChart class="chart" v-show="isActive"  :chartData="datacollection" :options="options" height="300" />
 
-<Componentna :message="DATA"></Componentna>
+<Componentna :message="tableData"></Componentna>
 
 
 
