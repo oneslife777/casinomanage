@@ -232,7 +232,7 @@ export default {
       /** テーブルに表示させるデータ */
       tableData: [],
       TD:[],  
-      DATA:[],
+      //DATA:[],
       jpyUsd:0,
       TOTAL:0,
       MT:[],
@@ -272,11 +272,16 @@ mounted(){
       }
      
   
-    axios.get('https://api.exchangeratesapi.io/latest')
+    axios.get('https://apiv2.bitz.com/Market/currencyRate?symbols=usd_jpy')
         .then(function(res){
-        this.jpyEur = res.data.rates.JPY
-        this.jpyUsd = res.data.rates.JPY/res.data.rates.USD
-        this.jpyUsd = this.jpyUsd.toFixed(2)
+        //this.jpyEur = res.data.rates.JPY
+        //this.jpyUsd = res.data.rates.JPY/res.data.rates.USD
+        //this.jpyUsd = this.jpyUsd.toFixed(2)
+       //this.jpyUsd = res.data
+      var RESP = res.data
+      // var tmp = RESP.filter(e => e.rate);
+
+      this.jpyUsd = RESP.data.usd_jpy.rate
         
         }.bind(this))
     
@@ -531,8 +536,8 @@ mounted(){
     const yearMonth = this.yearMonth
     
     this.fetchAbData({yearMonth})
-    this.DATA = this.abData[yearMonth]
-    this.DATA.date = this.DATA.date.replace(/-/g,"/")
+    //this.DATA = this.abData[yearMonth]
+    //this.DATA.date = this.DATA.date.replace(/-/g,"/")
    
     },
 

@@ -8,16 +8,18 @@
       <v-btn outlined small class="ma-4" @click="setToday" color="white">
         今日
       </v-btn>
-      <v-btn icon color="white" @click="$refs.calendar.prev(); DATAOPEN()">
+      <v-btn outlined small class="ma-4" @click="GETM"  color="white">
+        収支表示
+      </v-btn>
+      <v-btn icon color="white" @click="$refs.calendar.prev()">
         <v-icon>mdi-chevron-left</v-icon>
       </v-btn>
-      <v-btn icon color="white" @click="$refs.calendar.next(); DATAOPEN()">
+      <v-btn icon color="white" @click="$refs.calendar.next()">
         <v-icon>mdi-chevron-right</v-icon>
       </v-btn>
       <v-toolbar-title class="white--text" >{{ title }}</v-toolbar-title>
 
     </v-sheet>
-
 
     <v-sheet height="90vh">
       <v-calendar
@@ -103,7 +105,7 @@ data () {
     }
   },
 
-    
+   
   
   computed: {
     ...mapState({
@@ -124,21 +126,8 @@ data () {
       'fetchAbData'
     ]),
 
-    async DATAOPEN(){
-    const yearMonth = this.yearMonth
-    const list = this.abData[yearMonth]
     
-
-    if (list) {
-    this.DATA = list
-    this.DATA = this.message
-    this.fetchAbData({yearMonth})}
-    else {
-        await this.fetchAbData({ yearMonth })
-        this.DATA = this.abData[yearMonth]
-      }
-    },
-
+   
     showEvent ({ nativeEvent, event }) {
         const open = () => {
           this.selectedEvent = event
@@ -162,9 +151,18 @@ data () {
       this.value = moment().format('yyyy-MM-DD');
       
     },
-   
+
+    GETM(){
+
+    const MSGDATA = this.message
+    this.DATA.splice(0,this.DATA.length,...MSGDATA);
+    this.getEvents()
+    },
+
     getEvents() {
-   
+    const MSGDATA = this.message
+    this.DATA.splice(0,this.DATA.length,...MSGDATA);
+    
       const events = []
       //var y = 0
       var COLORS = 'blue'
@@ -251,7 +249,8 @@ data () {
      }
     }
 
-       this.events = events;   
+       //this.events = events;  
+       this.events.splice(0,this.events.length,...events); 
        
     },
 
@@ -260,9 +259,6 @@ data () {
     },
   },
 
-created () {
-    this.DATAOPEN()     
-  }
 
 }
 

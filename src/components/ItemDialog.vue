@@ -476,15 +476,26 @@ export default {
 
     /** 通貨が切り替わったとき */
     onChangeTuuka () {
-      
-    axios.get('https://api.exchangeratesapi.io/latest')
+    
+     axios.get('https://apiv2.bitz.com/Market/currencyRate?symbols=usd_jpy')
         .then(function(res){
-        this.jpyEur = res.data.rates.JPY
-        this.jpyUsd = res.data.rates.JPY/res.data.rates.USD
-        this.jpyUsd = this.jpyUsd.toFixed(2)
+       
+        var RESP = res.data
+        this.jpyUsd = RESP.data.usd_jpy.rate
+        
         this.amount = Number((this.amount2 /this.jpyUsd).toFixed(2))
         this.amount = Math.round(this.amount * 100) / 100;
+
         }.bind(this))
+
+   // axios.get('https://api.exchangeratesapi.io/latest')
+    //    .then(function(res){
+    //    this.jpyEur = res.data.rates.JPY
+    //    this.jpyUsd = res.data.rates.JPY/res.data.rates.USD
+    //    this.jpyUsd = this.jpyUsd.toFixed(2)
+    //    this.amount = Number((this.amount2 /this.jpyUsd).toFixed(2))
+    //    this.amount = Math.round(this.amount * 100) / 100;
+    //    }.bind(this))
         
     },
     
@@ -542,16 +553,17 @@ export default {
         this.amount2 =Math.abs(this.amount2)
       }
 
-
-      axios.get('https://api.exchangeratesapi.io/latest')
+      axios.get('https://apiv2.bitz.com/Market/currencyRate?symbols=usd_jpy')
         .then(function(res){
-        this.jpyEur = res.data.rates.JPY
-        this.jpyUsd = res.data.rates.JPY/res.data.rates.USD
-        this.jpyUsd = this.jpyUsd.toFixed(2)
+       
+        var RESP = res.data
+        this.jpyUsd = RESP.data.usd_jpy.rate
+        
         this.amount = Number((this.amount2 /this.jpyUsd).toFixed(2))
         this.amount = Math.round(this.amount * 100) / 100;
+
         }.bind(this))
-     
+
     },
 
     onChangeTuukaBS () {
@@ -616,13 +628,7 @@ export default {
       this.agree2 = false
       this.agree3 = false
       this.agree = false
-      axios.get('https://api.exchangeratesapi.io/latest')
-    .then(function(res){
-        this.jpyEur = res.data.rates.JPY
-        this.jpyUsd = res.data.rates.JPY/res.data.rates.USD
-        this.jpyUsd = this.jpyUsd.toFixed(2)
-        this.amount2 = 0
-    }.bind(this))
+      
       this.inout = item.income != null ? 'income' : 'outgo'
       if (this.inout === 'income') {
         this.categoryItems = this.incomeItems
