@@ -2,15 +2,15 @@
   <div>
 <div>
  
- 
+
 </div>
     <v-sheet tile height="6vh" color="blue lighten" class="d-flex align-center">
       <v-btn outlined small class="ma-4" @click="setToday" color="white">
         今日
       </v-btn>
-      <v-btn outlined small class="ma-4" @click="GETM"  color="white">
+      <!--<v-btn outlined small class="ma-4" @click="GETM"  color="white">
         収支表示
-      </v-btn>
+      </v-btn>-->
       <v-btn icon color="white" @click="$refs.calendar.prev()">
         <v-icon>mdi-chevron-left</v-icon>
       </v-btn>
@@ -83,7 +83,14 @@ import { mapState, mapActions } from 'vuex'
 
 export default {
 name:'Calendar',
-props: ['message'],
+//props: ['message'],
+props: {
+    message: {
+      type: Array,
+      default: () => {
+        return []
+      }}},
+
 
 data () {
     
@@ -105,6 +112,13 @@ data () {
     }
   },
 
+watch: {
+    message(value) {
+      
+      this.DATA.splice(0,this.DATA.length,...value);
+      this.getEvents()
+    }
+  },
    
   
   computed: {
@@ -152,16 +166,15 @@ data () {
       
     },
 
-    GETM(){
-
-    const MSGDATA = this.message
-    this.DATA.splice(0,this.DATA.length,...MSGDATA);
-    this.getEvents()
-    },
+   // GETM(){
+    
+    //this.DATA.splice(0,this.DATA.length,...this.DATA);
+    //this.getEvents()
+    //},
 
     getEvents() {
-    const MSGDATA = this.message
-    this.DATA.splice(0,this.DATA.length,...MSGDATA);
+    //const MSGDATA = this.message
+    //this.DATA.splice(0,this.DATA.length,...MSGDATA);
     
       const events = []
       //var y = 0
