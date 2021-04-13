@@ -203,6 +203,11 @@ import Calendar from '../components/Calendar.vue'
 import axios from 'axios'
 import Vue from 'vue'
 import BarChart from '@/components/BarChart'
+import VueAnalytics from 'vue-analytics';
+
+Vue.use(VueAnalytics, {
+  id: 'UA-172383676-2'
+});
 
 
 export default {
