@@ -26,6 +26,6 @@ const router = new VueRouter({
 
 Vue.use(VueGtag, {
   config: {UA-172383676-2: process.env.VUE_APP_GA_ID}
-}, router);
+}, router)
 
 export default router
