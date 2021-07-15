@@ -236,7 +236,8 @@ export default {
       yearMonth: `${year}-${month}`,
       /** テーブルに表示させるデータ */
       tableData: [],
-      TD:[],  
+      TD:[], 
+      //TEST:[], 
       //DATA:[],
       jpyUsd:0,
       TOTAL:0,
@@ -254,6 +255,7 @@ export default {
 mounted(){
     this.GURAHU();
     this.fillData();
+    this.$ga.page('/pagename');
 
     this.options = {
         responsive: true,
@@ -481,7 +483,7 @@ mounted(){
       
 
       //日付ごとの収支取得する。まず日付ごとに配列を作成
-      for(var i=0; i < TD.length; i++) { 
+      for(var i=0; i < TD.length; i++)  {
       var TODAY = TD[i].date //配列の1番目の日付を取得
       var DAYS = TD.filter(item => item.date === TODAY) //日付ごとに配列生成
       var incomeday = DAYS.map(x => x.income) //incomeデータのみ抽出
@@ -497,7 +499,16 @@ mounted(){
       daytotal = (daytotal).toFixed(2) //1日ごとの合計
 
       monthTT.push(daytotal)
-      let monthtotal = monthTT.reduce(function(sum, element){
+
+      var cleanMONTH = monthTT.filter(function(v1,i1,a1){ 
+      return (a1.findIndex(function(v2){ 
+      return (v2===v1) 
+      }) === i1);
+      });
+
+
+
+      let monthtotal = cleanMONTH.reduce(function(sum, element){
       return (parseFloat(sum) + parseFloat(element)) //outgoだけの合計
       }, 0);
       
@@ -505,12 +516,13 @@ mounted(){
       // 重複を取り除く処理
       var cleanList = DAYSUM.filter(function(v1,i1,a1){ 
       return (a1.findIndex(function(v2){ 
-      return (v1.date===v2.date) 
+      return (v2.date===v1.date) 
       }) === i1);
       });
 
       this.TD = cleanList
-      
+      //this.TEST = DAYSUM
+      //this.TEST2 = cleanList
       } 
 
       this.CHART()
