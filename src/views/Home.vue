@@ -130,7 +130,6 @@
 <v-col>
 
 
-
  
  <v-spacer/>
 </v-col>
@@ -279,16 +278,21 @@ mounted(){
       }
      
   
-    axios.get('https://apiv2.bitz.com/Market/currencyRate?symbols=usd_jpy')
+    axios.get('http://api.exchangeratesapi.io/v1/latest?access_key=db8d52d345be807321097c7a499e8f3b&format=1')
         .then(function(res){
         //this.jpyEur = res.data.rates.JPY
         //this.jpyUsd = res.data.rates.JPY/res.data.rates.USD
         //this.jpyUsd = this.jpyUsd.toFixed(2)
        //this.jpyUsd = res.data
-      var RESP = res.data
+      var RESP = res.data.rates.JPY
       // var tmp = RESP.filter(e => e.rate);
 
-      this.jpyUsd = RESP.data.usd_jpy.rate
+      var JPY = Number(RESP);
+          //parseInt(JPY, 10);
+          JPY = Number(JPY).toFixed(2)
+          //JPY = (JPY / 1000).toFixed(2)
+
+      this.jpyUsd = JPY
         
         }.bind(this))
     

@@ -477,11 +477,19 @@ export default {
     /** 通貨が切り替わったとき */
     onChangeTuuka () {
     
-     axios.get('https://apiv2.bitz.com/Market/currencyRate?symbols=usd_jpy')
+    axios.get('http://api.exchangeratesapi.io/v1/latest?access_key=db8d52d345be807321097c7a499e8f3b&format=1')
         .then(function(res){
-       
-        var RESP = res.data
-        this.jpyUsd = RESP.data.usd_jpy.rate
+        //this.jpyEur = res.data.rates.JPY
+        //this.jpyUsd = res.data.rates.JPY/res.data.rates.USD
+        //this.jpyUsd = this.jpyUsd.toFixed(2)
+       //this.jpyUsd = res.data
+      var RESP = res.data.rates.JPY
+      // var tmp = RESP.filter(e => e.rate);
+
+      var JPY = Number(RESP);
+          //parseInt(JPY, 10);
+          JPY = Number(JPY).toFixed(2)
+        this.jpyUsd = JPY;
         
         this.amount = Number((this.amount2 /this.jpyUsd).toFixed(2))
         this.amount = Math.round(this.amount * 100) / 100;
