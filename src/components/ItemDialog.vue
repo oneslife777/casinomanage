@@ -477,13 +477,13 @@ export default {
     /** 通貨が切り替わったとき */
     onChangeTuuka () {
     
-    axios.get('http://api.exchangeratesapi.io/v1/latest?access_key=db8d52d345be807321097c7a499e8f3b&format=1')
+    axios.get('https://api.coingecko.com/api/v3/simple/price?ids=tether&vs_currencies=jpy')
         .then(function(res){
         //this.jpyEur = res.data.rates.JPY
         //this.jpyUsd = res.data.rates.JPY/res.data.rates.USD
         //this.jpyUsd = this.jpyUsd.toFixed(2)
        //this.jpyUsd = res.data
-      var RESP = res.data.rates.JPY
+      var RESP = res.data.tether.jpy
       // var tmp = RESP.filter(e => e.rate);
 
       var JPY = Number(RESP);
