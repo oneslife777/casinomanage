@@ -561,11 +561,19 @@ export default {
         this.amount2 =Math.abs(this.amount2)
       }
 
-      axios.get('https://apiv2.bitz.com/Market/currencyRate?symbols=usd_jpy')
+      axios.get('https://api.coingecko.com/api/v3/simple/price?ids=tether&vs_currencies=jpy')
         .then(function(res){
-       
-        var RESP = res.data
-        this.jpyUsd = RESP.data.usd_jpy.rate
+        //this.jpyEur = res.data.rates.JPY
+        //this.jpyUsd = res.data.rates.JPY/res.data.rates.USD
+        //this.jpyUsd = this.jpyUsd.toFixed(2)
+       //this.jpyUsd = res.data
+      var RESP = res.data.tether.jpy
+      // var tmp = RESP.filter(e => e.rate);
+
+      var JPY = Number(RESP);
+          //parseInt(JPY, 10);
+          JPY = Number(JPY).toFixed(2)
+        this.jpyUsd = JPY;
         
         this.amount = Number((this.amount2 /this.jpyUsd).toFixed(2))
         this.amount = Math.round(this.amount * 100) / 100;
