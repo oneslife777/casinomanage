@@ -4,7 +4,7 @@ module.exports = {
   transpileDependencies: [
     'vuetify'
   ],
-  publicPath: isProd ? '/casinotools' : '/',
+  publicPath: isProd ? 'management' : '/',
   outputDir: 'docs',
   filenameHashing: false,
   productionSourceMap: false
