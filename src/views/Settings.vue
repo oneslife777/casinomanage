@@ -75,7 +75,7 @@ export default {
       stringRule: v => v.length <= 1000 || '1000文字以内で入力してください',
       categoryRules: [
         v => createItems(v).length !== 0 || 'カテゴリは1つ以上必要です',
-        v => itemMaxLength(v) <= 10 || '各カテゴリは10文字以内で入力してください'
+        v => itemMaxLength(v) <= 1000 || '各カテゴリは1000文字以内で入力してください'
       ],
       tagRule: v => itemMaxLength(v) <= 10 || '各タグは10文字以内で入力してください'
     }
